@@ -4,4 +4,3 @@ yarn-*.log
 .env
 .env.*
 dist
-.next
