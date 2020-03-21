@@ -1,6 +1,6 @@
 FROM arm32v7/node:12.16.1-alpine3.11
 
-RUN mkdir -p /alorg
+RUN mkdir /alorg
 WORKDIR /alorg
 
 COPY tsconfig.json .
