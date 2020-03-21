@@ -43,3 +43,7 @@ Screw it, piku isn't going to work for me, rolling my own ansible configuration 
 I'm cleaning my single private Docker Hub repository I used long ago for my D&D 5E character app to use for this instead. Docker Hub also has a github integration for building and pushing to the hub on merge to master. Bonus!
 
 All I gotta do now is see if github workflows can help me with the restarting process. If that doesn't work I'll see how much work a Docker Hub webhook is to set up (prolly just dns that is hard). Otherwise good ol' polling to see if there is a new version available on an interval on the pi.
+
+### Saturday March 21, 2020 -- supplemental
+
+Bash is sometimes super hard to do stuff, like a health check with a timeout. It's times like these I'm super happy that I can just jump into node.js land and execute a script...
