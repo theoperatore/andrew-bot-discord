@@ -47,3 +47,11 @@ All I gotta do now is see if github workflows can help me with the restarting pr
 ### Saturday March 21, 2020 -- supplemental
 
 Bash is sometimes super hard to do stuff, like a health check with a timeout. It's times like these I'm super happy that I can just jump into node.js land and execute a script...
+
+### Saturday March 21, 2020 -- supplemental
+
+Finally got Docker Hub working with my sample server app. Took a lot of googling for why I couldn't `mkdir` on Docker Hub's build step.
+
+Turns out I can't build for a different cpu archicture. The recommendation was to build the images on the pi itself, but that kinda defeats the purpose. I dunno. might go that route anyway...
+
+For now, I am [installing Docker on my pi](https://www.docker.com/blog/happy-pi-day-docker-raspberry-pi/) and seeing if I can even run the damn thing. Here goes!
