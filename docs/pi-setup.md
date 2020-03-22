@@ -1,6 +1,6 @@
-# Setting up a Pi for the first time
+# Setting up a Headless Pi from zero
 
-Steps in order to get the pi in working condition
+Steps in order to get the pi in working condition with ssh, wifi, and docker.
 
 ### OS
 
@@ -38,3 +38,45 @@ network={
 ```
 
 The entire [wpa_supplicant](https://w1.fi/cgit/hostap/plain/wpa_supplicant/wpa_supplicant.conf) specification doc.
+
+### Update to latest
+
+I like following the official [instructions](https://www.raspberrypi.org/documentation/raspbian/updating.md) to upgrade.
+
+```bash
+sudo apt update
+```
+
+then
+
+```bash
+sudo apt full-upgrade
+```
+
+### Installing docker
+
+It's now super easy to install docker onto the raspberry pi:
+
+```bash
+curl -sSL https://get.docker.com |sh
+```
+
+<!-- Then give your current user permission to run docker commands:
+
+```bash
+sudo usermod -aG docker $USER
+``` -->
+
+You can can verify it's running with:
+
+```bash
+docker info
+```
+
+It'll error if it can't get access to the `dockerd`.
+
+You can verify `dockerd` with:
+
+```bash
+systemctl status docker
+```
