@@ -1,0 +1,13 @@
+[Unit]
+Description=AndrewBot discord server
+Requires=network-online.target docker.service
+After=watchtower.service
+
+[Service]
+# Don't restart, conflicts with Watchtower
+Restart=never
+ExecStart=/usr/bin/docker run --rm --name andrewbot -p 3000:3000 index.docker.io/theoperatore/andrew-bot-discord 
+ExecStop=/usr/bin/docker stop -t 2 andrewbot
+
+[Install]
+WantedBy=default.target

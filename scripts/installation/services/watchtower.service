@@ -1,0 +1,12 @@
+[Unit]
+Description=Watchtower container
+Requires=network-online.target docker.service
+After=docker.service
+
+[Service]
+Restart=never
+ExecStart=/usr/bin/docker run --rm --name watchtower -v /var/run/docker.sock:/var/run/docker.sock -v /home/pi/.docker/config.json:/config.json index.docker.io/containrrr/watchtower:armhf-latest -i 600 --cleanup
+ExecStop=/usr/bin/docker stop -t 2 watchtower
+
+[Install]
+WantedBy=default.target

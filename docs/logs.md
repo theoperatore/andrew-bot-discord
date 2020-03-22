@@ -102,3 +102,9 @@ docker run --rm --name watchtower -e WATCHTOWER_DEBUG=true -e WATCHTOWER_POLL_IN
 ```
 
 Next step is to create some systemctl services so both andrewbot and watchtower will get restarted if the pi restarts.
+
+### Sunday March 22, 2020 -- supplemental
+
+Well I got everything working, then I rebooted the pi, but it wouldn't stay up. It seem to be kep crashing.
+
+So I decided to start fresh. I flashed the newest verison of rasbian onto the sd card and started again. At least my documentation is up-to-date on how to bring up a headless pi...
