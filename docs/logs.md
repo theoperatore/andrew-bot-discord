@@ -82,3 +82,13 @@ I start today evaluating [Watchtower](https://containrrr.github.io/watchtower/).
 I'm thinking that I'll copy over a `secrets.json` file in a predictable directory, probably `/alorg/secrets.json`. Then I'll have my container mount that file, if it exists into the running container of the app, and I'll be able to require it in node.js. To handle watchtower / docker hub credentials, it seems the raspberry pi already has `jq` installed so I can use that to parse the secrets file and extract a username, then extract the password into a temporary file in order to send via standard in to `docker login --username <name> --password-stdin`. Dunno if this is worth it, could just make the Docker Hub repository public and not have to deal with this nonsense. I mean the code repo is already public...I'll decide later.
 
 For now, onto watchtower.
+
+### Sunday March 22, 2020 -- supplemental
+
+Haven't gotten to watchtower yet. I got sidetracked setting up some more logging on startup and a better Dockerfile. Now it'll handle signals without having to pass them down via a bash script. Also outfitted my simple server with some examples of how to gracefully shutdown the server by capturing signals and unhandled events.
+
+Although, it does mean that to test my app in production vs development is much harder. Might revisit later.
+
+Anyway, now I have the git_hash and branch in my process so that I can know which version of the app I'm running. Thanks to [this post](https://artsy.github.io/blog/2018/09/10/Dockerhub-Stamping-Commits/). Think I'll add an "/info" route that returns the git sha, process id, maybe some other OS level things too? dunno. maybe I'll just have a separate process handle that monitoring stuff.
+
+Hope this docker hub stuff works!
