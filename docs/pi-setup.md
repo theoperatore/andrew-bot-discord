@@ -61,11 +61,11 @@ It's now super easy to install docker onto the raspberry pi:
 curl -sSL https://get.docker.com |sh
 ```
 
-<!-- Then give your current user permission to run docker commands:
+Then give your current user permission to run docker commands, as it says when you finish installing docker:
 
 ```bash
 sudo usermod -aG docker $USER
-``` -->
+```
 
 You can can verify it's running with:
 
@@ -79,4 +79,12 @@ You can verify `dockerd` with:
 
 ```bash
 systemctl status docker
+```
+
+### Nice commands
+
+See a snapshot of the process using the most memory
+
+```bash
+ps -o pid,user,%mem,command ax | sort -b -k3 -r
 ```

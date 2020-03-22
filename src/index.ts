@@ -1,3 +1,4 @@
+import os from 'os';
 import { createServer } from 'http';
 import { parse } from 'url';
 
@@ -18,6 +19,7 @@ const server = createServer((req, res) => {
     res.write(
       JSON.stringify({
         version: GIT_SHA,
+        arch: os.arch,
       })
     );
     res.end();

@@ -108,3 +108,13 @@ Next step is to create some systemctl services so both andrewbot and watchtower 
 Well I got everything working, then I rebooted the pi, but it wouldn't stay up. It seem to be kep crashing.
 
 So I decided to start fresh. I flashed the newest verison of rasbian onto the sd card and started again. At least my documentation is up-to-date on how to bring up a headless pi...
+
+### Sunday March 22, 2020 -- supplemental
+
+Ok now I'm on latest raspian buster, installed everything, added watchtower and andrewbot as services in systemctl.
+
+When I rebooted, it took an extra min to be stable, I assume because docker was doing lots of I/O which causes the system to hang waiting for the sd card?
+
+Either way, we're in a stable place. Now going to make a change to the docker file to see if it'll crash if it tries to update the image.
+
+After this, if everything works, I'll call this a good weekend!
