@@ -92,3 +92,13 @@ Although, it does mean that to test my app in production vs development is much 
 Anyway, now I have the git_hash and branch in my process so that I can know which version of the app I'm running. Thanks to [this post](https://artsy.github.io/blog/2018/09/10/Dockerhub-Stamping-Commits/). Think I'll add an "/info" route that returns the git sha, process id, maybe some other OS level things too? dunno. maybe I'll just have a separate process handle that monitoring stuff.
 
 Hope this docker hub stuff works!
+
+### Sunday March 22, 2020 -- supplemental
+
+Watchtower is pretty nifty. There was some wonkiness with config/credentials. Need to start the andrewbot app with the image name: `index.docker.io/theoperatore/andrew-bot-discord`, then the config.json will match.
+
+```bash
+docker run --rm --name watchtower -e WATCHTOWER_DEBUG=true -e WATCHTOWER_POLL_INTERVAL=600 -v /home/pi/.docker/config.json:/config.json -v /var/run/docker.sock:/var/run/docker.sock containrrr/watchtower:armhf-latest
+```
+
+Next step is to create some systemctl services so both andrewbot and watchtower will get restarted if the pi restarts.
