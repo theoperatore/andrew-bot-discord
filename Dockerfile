@@ -15,7 +15,7 @@ COPY package.json .
 COPY yarn.lock .
 COPY src .
 
-RUN yarn install
+RUN yarn install --frozen-lockfile
 RUN yarn build
 
 ENV GIT_SHA ${COMMIT}
