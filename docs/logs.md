@@ -1,6 +1,21 @@
 # Logs
 
-What I went through to get AndrewBot-Discord up and running.
+What I went through to get AndrewBot-Discord up and running. I started this log after doing some initial research. The requirements are:
+
+- A server that is always running (no sleep) (needed for discord's websocket)
+- Has automated deployments after merging to master
+- A platform environment that can easily be swapped out for another (rpi => digital ocean => PaaS)
+- Costs me 0\$ for upkeep
+
+I investigated using [Zeit.co](https://zeit.co) with [next.js](https://nextjs.org) but couldn't use that because zeit doesn't support non-serverless environments (violated the "always running" requirement).
+
+[Digital Ocean's Kubernetes](https://www.digitalocean.com/products/kubernetes/) deployments would make everything super easy, except that it costs ~\$50/month.
+
+[A Digital Ocean droplet(s) running dokku](https://marketplace.digitalocean.com/apps/dokku) would also make everything super easy, except that it costs ~/\$10/month (want to run it on the 2nd lowest tier).
+
+Also considered [heroku](https://www.heroku.com/pricing) but again they wanted to sleep my machines unless I paid \$5/month, might as well go with Digital Ocean (cause I kinda like them better) at that point.
+
+I consulted my brother through the whole process and as we were talking I was wondering what would need to happen to make the original AndrewBot raspberrypi3 B+ work. That's where we start the investigation...
 
 ### Friday March 20, 2020
 
@@ -52,6 +67,18 @@ Bash is sometimes super hard to do stuff, like a health check with a timeout. It
 
 Finally got Docker Hub working with my sample server app. Took a lot of googling for why I couldn't `mkdir` on Docker Hub's build step.
 
-Turns out I can't build for a different cpu archicture. The recommendation was to build the images on the pi itself, but that kinda defeats the purpose. I dunno. might go that route anyway...
+Turns out I can't build for a different cpu archicture. The [recommendation](https://github.com/docker/hub-feedback/issues/1261#issuecomment-441126749) was to build the images on the pi itself, but that kinda defeats the purpose. I dunno. might go that route anyway...
 
 For now, I am [installing Docker on my pi](https://www.docker.com/blog/happy-pi-day-docker-raspberry-pi/) and seeing if I can even run the damn thing. Here goes!
+
+### Saturday March 21, 2020 -- supplemental
+
+Success! The images that are built from master via Docker Hub are runnable perfecty by the raspberry pi. now for watchtower.
+
+### Sunday March 22, 2020
+
+I start today evaluating [Watchtower](https://containrrr.github.io/watchtower/). I realized that I have a private docker hub repo for AndrewBot. This means I have to give watchtower (and the pi) my docker hub credentials. I'll need credential support anyway in order to set my discord bot token during runtime so might as well think about this too.
+
+I'm thinking that I'll copy over a `secrets.json` file in a predictable directory, probably `/alorg/secrets.json`. Then I'll have my container mount that file, if it exists into the running container of the app, and I'll be able to require it in node.js. To handle watchtower / docker hub credentials, it seems the raspberry pi already has `jq` installed so I can use that to parse the secrets file and extract a username, then extract the password into a temporary file in order to send via standard in to `docker login --username <name> --password-stdin`. Dunno if this is worth it, could just make the Docker Hub repository public and not have to deal with this nonsense. I mean the code repo is already public...I'll decide later.
+
+For now, onto watchtower.
