@@ -13,6 +13,14 @@ const server = createServer((req, res) => {
     res.statusCode = 200;
     res.write('pong');
     res.end();
+  } else if (parsedUrl.pathname === '/info') {
+    res.setHeader('Content-Type', 'application/json');
+    res.write(
+      JSON.stringify({
+        version: GIT_SHA,
+      })
+    );
+    res.end();
   } else {
     res.statusCode = 501;
     res.end();
