@@ -9,7 +9,7 @@
   },
   "private": true,
   "scripts": {
-    "dev": "GIT_SHA=$(git rev-parse --short HEAD) GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD) ts-run src/index.ts",
+    "dev": "GIT_SHA=$(git rev-parse --short HEAD) GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD) ts-run -r dotenv/config src/index.ts",
     "build": "tsc",
     "start": "echo 'TODO: easy docker image building support' && exit 1"
   },

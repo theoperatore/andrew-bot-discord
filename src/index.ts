@@ -2,6 +2,7 @@ import os from 'os';
 import { createServer } from 'http';
 import { parse } from 'url';
 
+const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 const GIT_SHA = process.env.GIT_SHA;
 const GIT_BRANCH = process.env.GIT_BRANCH;
 const isProduction = process.env.NODE_ENV === 'production';
@@ -19,7 +20,8 @@ const server = createServer((req, res) => {
     res.write(
       JSON.stringify({
         version: GIT_SHA,
-        arch: os.arch,
+        arch: os.arch(),
+        token: !!DISCORD_BOT_TOKEN,
       })
     );
     res.end();

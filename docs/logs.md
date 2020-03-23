@@ -118,3 +118,11 @@ When I rebooted, it took an extra min to be stable, I assume because docker was 
 Either way, we're in a stable place. Now going to make a change to the docker file to see if it'll crash if it tries to update the image.
 
 After this, if everything works, I'll call this a good weekend!
+
+### Monday March 23, 2020
+
+Everything is set up, I even got environment variables in there. It's a bit wonky, but it seems to all be working right. I should put together a system diagram of the moving parts just so I know what's going on.
+
+Now that I got the environment all set up, and everything is mostly automatic...I can actually start deving the server!
+
+Progress!

@@ -14,6 +14,16 @@ Because these are arm architecture we're building for, Docker Hub can't build wi
 
 Also don't touch the `hooks` folder...that's needed by Docker Hub to build this thing...
 
+### Secrets
+
+Right now for simplicity, all secrets are copied over from a `.env` file manually. The variables defined in the local `.env` file will be mounted via the `docker run` option `--env-file` and available at runtime.
+
+Currently used environment vars defined this way:
+
+```
+- DISCORD_BOT_TOKEN: `string` - the token from discord's bot page
+```
+
 ### License
 
 MIT
