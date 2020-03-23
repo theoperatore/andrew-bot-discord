@@ -6,7 +6,8 @@ After=watchtower.service
 [Service]
 # Don't restart, conflicts with Watchtower
 Restart=never
-ExecStart=/usr/bin/docker run --rm --name andrewbot -p 3000:3000 --env-file=/home/pi/andrewbot/env index.docker.io/theoperatore/andrew-bot-discord 
+ExecStartPre=-/usr/bin/docker rm -f andrewbot
+ExecStart=/usr/bin/docker run --name andrewbot -p 3000:3000 --env-file=/home/pi/andrewbot/env index.docker.io/theoperatore/andrew-bot-discord 
 ExecStop=/usr/bin/docker stop -t 2 andrewbot
 
 [Install]

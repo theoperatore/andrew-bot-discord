@@ -5,7 +5,8 @@ After=docker.service
 
 [Service]
 Restart=never
-ExecStart=/usr/bin/docker run --rm --name watchtower -v /var/run/docker.sock:/var/run/docker.sock -v /home/pi/.docker/config.json:/config.json index.docker.io/containrrr/watchtower:armhf-latest -i 600 --cleanup
+ExecStartPre=-/usr/bin/docker rm -f watchtower
+ExecStart=/usr/bin/docker run --name watchtower -v /var/run/docker.sock:/var/run/docker.sock -v /home/pi/.docker/config.json:/config.json index.docker.io/containrrr/watchtower:armhf-latest -i 600 --cleanup
 ExecStop=/usr/bin/docker stop -t 2 watchtower
 
 [Install]
