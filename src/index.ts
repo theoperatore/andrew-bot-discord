@@ -19,7 +19,7 @@ const server = createServer((req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.write(
       JSON.stringify({
-        version: '1.0.0',
+        version: '1.0.1',
         git_version: GIT_SHA,
         arch: os.arch(),
         token: !!DISCORD_BOT_TOKEN,
