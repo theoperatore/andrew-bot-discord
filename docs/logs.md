@@ -132,3 +132,38 @@ Progress!
 Now I have watchtower reading from an env file as well, it should send me emails when it updates, hopefully.
 
 Now that a majority of the infrastructure is in place, I can finally start working on the discord server itself! yay!
+
+### Tuesday March 24, 2020 -- supplemental
+
+I've found that watchtower stop scheduling updates if the notification stack fails. It uses smtp to send mail and by default, the raspberry pi doesn't have smtp as a service running.
+
+Gonna install it via apt and see what happens:
+
+```bash
+sudo apt update
+sudp apt install ssmtp
+```
+
+Here goes.
+
+### Tuesday March 24, 2020 -- supplemental
+
+`ssmtp` is deprecated on `raspian buster`. following the [instructions](https://www.raspberrypi.org/forums/viewtopic.php?t=244147#p1517480) I'm going to try swapping for `msmtp`.
+
+Good ol' outdated packages!
+
+### Tuesday March 24, 2020 -- supplemental
+
+same problem from watchtower. Might skip the email and do notifications at a later date.
+
+```bash
+dial tcp: lookup smtp.google.com on 192.168.1.1:53
+```
+
+### Tuesday March 24, 2020 -- supplemental
+
+I took 5 mins to see if the slack integration would work and what do you know! It works.
+
+I created a new workspace named `Alorg Notifications` and added a new integration to it named AndrewBot Notifier via slack's api page. Then created a new Incoming Webhook for the andrewbot channel. Copied the webhook url and added it as an environment variable to watchtower and there we go.
+
+Now I got notifications.
