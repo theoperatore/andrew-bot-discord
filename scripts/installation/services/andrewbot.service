@@ -1,7 +1,7 @@
 [Unit]
 Description=AndrewBot discord server
 Requires=network-online.target docker.service
-After=watchtower.service
+After=docker.service
 
 [Service]
 # Don't restart, conflicts with Watchtower

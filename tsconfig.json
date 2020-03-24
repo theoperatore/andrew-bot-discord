@@ -23,5 +23,5 @@
     "outDir": "dist"
   },
   "exclude": ["dist", "scripts"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "package.json"]
 }
