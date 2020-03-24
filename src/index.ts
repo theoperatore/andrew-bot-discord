@@ -84,17 +84,32 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
+  // don't do anything on bot messages
+  if (message.author?.bot) return;
+
   console.log(
-    '> got message',
+    '> got message from',
+    message.author?.username,
+    ':',
     message.content,
-    message.author?.avatar,
     message.channel?.id
   );
+
   if (message.content === 'ping') {
     if (message.reply) {
       message.reply('pong');
     }
   }
+});
+
+client.on('error', error => {
+  console.log(`discord client error: ${error.message}`);
+  console.error(error);
+});
+
+client.on('shardError', (error, id) => {
+  console.log(`discord shard error: ${error.message} -- id: ${id}`);
+  console.error(error);
 });
 
 client.login(DISCORD_BOT_TOKEN);

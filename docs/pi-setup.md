@@ -17,6 +17,9 @@ This will enable the ssh daemon to run at startup with some defaults:
 ```bash
 # password: raspberry
 ssh pi@raspberry.local
+
+# copy over your ssh key for the user pi
+ssh-copy-id pi@raspberry.local
 ```
 
 ### Wifi
