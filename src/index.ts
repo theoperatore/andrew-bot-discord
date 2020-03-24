@@ -1,6 +1,7 @@
 import os from 'os';
 import { createServer } from 'http';
 import { parse } from 'url';
+import Discord from 'discord.js';
 
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 const GIT_SHA = process.env.GIT_SHA;
@@ -75,3 +76,25 @@ process.on('unhandledRejection', (reason, promise) => {
   console.log('Unhandled rejection at ', promise, `reason: ${reason}`);
   shutdown(true);
 });
+
+const client = new Discord.Client();
+
+client.on('ready', () => {
+  console.log('> discord client ready');
+});
+
+client.on('message', message => {
+  console.log(
+    '> got message',
+    message.content,
+    message.author?.avatar,
+    message.channel?.id
+  );
+  if (message.content === 'ping') {
+    if (message.reply) {
+      message.reply('pong');
+    }
+  }
+});
+
+client.login(DISCORD_BOT_TOKEN);
