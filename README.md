@@ -24,6 +24,16 @@ Currently used environment vars defined this way:
 - DISCORD_BOT_TOKEN: `string` - the token from discord's bot page
 ```
 
+### Watchtower secrets
+
+To configure watchtower easily, I've added another local env file: `.env.watchtower`. When you run the `copy-env.sh` script it'll copy over both env files to the raspberry pi.
+
+Then, each systemctl service will attempt to read those env files at docker runtime via `--env-file`.
+
+Check the [watchtower documentation](https://containrrr.github.io/watchtower/arguments/) on which variables are to be used when.
+
+Currently, watchtower is set to update every 10 mins.
+
 ### License
 
 MIT

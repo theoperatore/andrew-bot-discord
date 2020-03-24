@@ -126,3 +126,9 @@ Everything is set up, I even got environment variables in there. It's a bit wonk
 Now that I got the environment all set up, and everything is mostly automatic...I can actually start deving the server!
 
 Progress!
+
+### Tuesday March 24, 2020
+
+Now I have watchtower reading from an env file as well, it should send me emails when it updates, hopefully.
+
+Now that a majority of the infrastructure is in place, I can finally start working on the discord server itself! yay!
