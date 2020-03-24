@@ -22,7 +22,9 @@ const server = createServer((req, res) => {
         version: '1.0.3',
         git_version: GIT_SHA,
         arch: os.arch(),
-        token: !!DISCORD_BOT_TOKEN,
+        freemem: os.freemem(),
+        totalmem: os.totalmem(),
+        availmem: os.totalmem() - os.freemem(),
       })
     );
     res.end();
@@ -86,18 +88,31 @@ client.on('message', message => {
   // don't do anything on bot messages
   if (message.author?.bot) return;
 
-  console.log(
-    '> got message from',
-    message.author?.username,
-    ':',
-    message.content,
-    message.channel?.id
-  );
-
   if (message.content === 'ping') {
     if (message.reply) {
       message.reply('pong');
     }
+  }
+
+  if (message.content?.match(/^\!info$/)) {
+    const infoMessage = new Discord.MessageEmbed()
+      .setAuthor('AndrewBot')
+      .setColor('#333333')
+      .setDescription(
+        'Technical information about AndrewBot and his well-being'
+      )
+      .addField('version', '1.0.4', true)
+      .addField('git_version', GIT_SHA, true)
+      .addField('arch', os.arch(), true)
+      .addField('freemem (kb)', os.freemem() / 1024, true)
+      .addField('totalmem (kb)', os.totalmem() / 1024, true)
+      .addField(
+        'availmem (kb)',
+        `${(os.totalmem() - os.freemem()) / 1024}`,
+        true
+      );
+
+    message.channel?.send(infoMessage);
   }
 });
 
