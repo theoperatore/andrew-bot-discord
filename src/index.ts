@@ -13,8 +13,7 @@ const server = createServer((req, res) => {
   const parsedUrl = parse(req.url!, true);
 
   if (parsedUrl.pathname === '/ping') {
-    res.statusCode = 200;
-    res.write('pong');
+    res.writeHead(200, 'pong');
     res.end();
   } else if (parsedUrl.pathname === '/info') {
     res.setHeader('Content-Type', 'application/json');
