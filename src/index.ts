@@ -1,7 +1,6 @@
 import os from 'os';
 import { createServer } from 'http';
 import { parse } from 'url';
-import { version } from '../package.json';
 
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
 const GIT_SHA = process.env.GIT_SHA;
@@ -20,7 +19,7 @@ const server = createServer((req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.write(
       JSON.stringify({
-        version,
+        version: '1.0.0',
         git_version: GIT_SHA,
         arch: os.arch(),
         token: !!DISCORD_BOT_TOKEN,
