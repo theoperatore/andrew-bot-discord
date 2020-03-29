@@ -1,4 +1,5 @@
 #!/bin/bash
 
 # These come from https://docs.docker.com/docker-cloud/builds/advanced/
-docker build --build-arg=COMMIT=$SOURCE_COMMIT --build-arg=BRANCH=$SOURCE_BRANCH -f $DOCKERFILE_PATH -t $IMAGE_NAME .
+# using my own git commit instad of $SOURCE_COMMIT to get the short version
+docker build --build-arg=COMMIT=$(git rev-parse --short HEAD) --build-arg=BRANCH=$SOURCE_BRANCH -f $DOCKERFILE_PATH -t $IMAGE_NAME .
