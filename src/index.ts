@@ -107,8 +107,10 @@ client.on('message', message => {
       .addField('freemem (kb)', os.freemem() / 1024, true)
       .addField('totalmem (kb)', os.totalmem() / 1024, true)
       .addField(
-        'availmem (kb)',
-        `${(os.totalmem() - os.freemem()) / 1024}`,
+        'usedmem (%)',
+        `${(((os.totalmem() - os.freemem()) / os.totalmem()) * 100).toFixed(
+          2
+        )}`,
         true
       );
 
