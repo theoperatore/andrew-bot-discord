@@ -167,3 +167,9 @@ I took 5 mins to see if the slack integration would work and what do you know! I
 I created a new workspace named `Alorg Notifications` and added a new integration to it named AndrewBot Notifier via slack's api page. Then created a new Incoming Webhook for the andrewbot channel. Copied the webhook url and added it as an environment variable to watchtower and there we go.
 
 Now I got notifications.
+
+### Sunday March 29, 2020
+
+Ok I have separated out my discord app from the api http server. I think I'm all set to start doing actual commands now.
+
+The last thing that I want to automate is the `version`. Every time I commit to master, I want it to bump the patch version. I wonder if I need to do something with a github workflow? maybe an environment variable during the build step? I dunno. I'll look into it later. For now, I'll just manually bump the versions as I see fit.
