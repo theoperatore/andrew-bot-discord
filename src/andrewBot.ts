@@ -1,7 +1,11 @@
 import Discord from 'discord.js';
 import { discordInfo } from './info';
+import { Parser } from './parser';
 
 const client = new Discord.Client();
+const parser = new Parser();
+
+parser.setCommand('info', 'Show AndrewBot info', async () => discordInfo());
 
 client.on('ready', () => {
   console.log('[discord]> discord client ready');
@@ -17,8 +21,16 @@ client.on('message', message => {
     }
   }
 
-  if (message.content?.match(/^\!info$/)) {
-    message.channel?.send(discordInfo());
+  const command = parser.parse(message.content);
+  if (command) {
+    command(message.content)
+      .then(out => {
+        message.channel?.send(out);
+      })
+      .catch(error => {
+        console.error(`[discord]> error from command:`, error);
+        message.channel?.send(`Bzzzzrt! Failed that command: ${error.message}`);
+      });
   }
 });
 
