@@ -173,3 +173,11 @@ Now I got notifications.
 Ok I have separated out my discord app from the api http server. I think I'm all set to start doing actual commands now.
 
 The last thing that I want to automate is the `version`. Every time I commit to master, I want it to bump the patch version. I wonder if I need to do something with a github workflow? maybe an environment variable during the build step? I dunno. I'll look into it later. For now, I'll just manually bump the versions as I see fit.
+
+### Monday March 30, 2020
+
+I wanted to add some tests when I copied over the parser from the old AndrewBot. Getting jest to work with babel with typescript is a real pain, so instead, I added nextjs as a dependency (because I probably want to use that as a small dashboard for andrewbot locally anyway) and then I really don't need to do anything else! Nextjs handles all the transpilation for me.
+
+HOWEVER. It seems adding nextjs as a dependency made the Docker Hub builds fail. The error I was seeing was due to network timeout. A quick google saw that yarn will frequently fail to download files when dependencies are large and the connection is slow. The work around is to just increase the timeout :(
+
+Hopething this will work.
