@@ -15,7 +15,10 @@ COPY package.json .
 COPY yarn.lock .
 COPY src .
 
-RUN yarn install --frozen-lockfile
+# We run yarn install with an increased network timeout (5min) to avoid "ESOCKETTIMEDOUT" errors from hub.docker.com
+# See, for example https://github.com/yarnpkg/yarn/issues/5540
+# this was added due to adding next.js as a dep
+RUN yarn install --frozen-lockfile --network-timeout 300000
 RUN yarn build
 
 ENV GIT_SHA ${COMMIT}
