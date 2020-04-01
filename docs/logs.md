@@ -181,3 +181,19 @@ I wanted to add some tests when I copied over the parser from the old AndrewBot.
 HOWEVER. It seems adding nextjs as a dependency made the Docker Hub builds fail. The error I was seeing was due to network timeout. A quick google saw that yarn will frequently fail to download files when dependencies are large and the connection is slow. The work around is to just increase the timeout :(
 
 Hopething this will work.
+
+### Tuesday March 31, 2020
+
+Now that everything seems to be stable and the command parsing works, going to try to get the game of the day functionality working.
+
+### Wednesday April 1, 2020
+
+Copied over most of the game of the day files. Now it's a matter of finding the best discord message formatting.
+
+It's tough not having a preview option.
+
+### Wednesday April 1, 2020 -- supplemental
+
+I think I've got it good for now. About to push it to master. Saw a curious thing though, I noticed that andrewbot the raspberry pi was a little sluggish when sshing. Ran a few commands, `htop` and `docker stats` and noticed that each container was allocating ~1Gb of memory. They definitely don't need that much.
+
+I restarted them using the `--memory` command and limited AndrewBot to use `200MiB` and watchtower to use `100Mib`. Going to monitor if this number is adequate during bust moments, like downloading new images for andrewbot or when there is increased stress and load during the "peak" usage hours of the discord channel.
