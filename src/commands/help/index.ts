@@ -1,4 +1,4 @@
-import { Parser } from 'src/parser';
+import { Parser } from '../../parser';
 
 export function createHelp(parser: Parser) {
   return async function help() {
