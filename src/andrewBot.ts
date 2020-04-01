@@ -1,11 +1,13 @@
 import Discord from 'discord.js';
 import { discordInfo } from './info';
 import { Parser } from './parser';
+import { gotd } from './commands/gotd';
 
 const client = new Discord.Client();
 const parser = new Parser();
 
 parser.setCommand('info', 'Show AndrewBot info', async () => discordInfo());
+parser.setCommand('gotd', 'Random Game of the Day', gotd);
 
 client.on('ready', () => {
   console.log('[discord]> discord client ready');
