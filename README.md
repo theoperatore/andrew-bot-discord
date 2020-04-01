@@ -22,6 +22,7 @@ Currently used environment vars defined this way:
 
 ```
 - DISCORD_BOT_TOKEN: `string` - the token from discord's bot page
+- GB_TOKEN: `string` - the api token for access to GiantBomb's api
 ```
 
 ### Watchtower secrets
