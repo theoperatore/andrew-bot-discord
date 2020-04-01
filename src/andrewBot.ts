@@ -6,8 +6,15 @@ import { gotd } from './commands/gotd';
 const client = new Discord.Client();
 const parser = new Parser();
 
-parser.setCommand('info', 'Show AndrewBot info', async () => discordInfo());
-parser.setCommand('gotd', 'Random Game of the Day', gotd);
+parser.setCommand('info', '!info: Show AndrewBot info', async () =>
+  discordInfo()
+);
+parser.setCommand('gotd', '!gotd: Random Game of the Day', gotd);
+parser.setCommand(
+  'help',
+  '!help: Show available commands',
+  async () => `Available commands:\n\n${parser.formatCommands()}`
+);
 
 client.on('ready', () => {
   console.log('[discord]> discord client ready');
