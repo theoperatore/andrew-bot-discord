@@ -2,23 +2,19 @@ import Discord from 'discord.js';
 import fetch from 'isomorphic-unfetch';
 import { platforms, Platform } from './giantBombPlatforms';
 
-const roundRobin = createRoundRobin(platforms);
+const roundRobin = createRoundRobinGenerator(platforms);
 const apiKey = process.env.GB_TOKEN;
 
 if (!apiKey) throw new Error('GB_TOKEN must be defined in environment');
 
-function createRoundRobin<T>(allItems: T[]): () => T {
-  let cacheIndex = Math.round(Math.random() * (allItems.length - 1));
-  return () => {
-    const item = { ...allItems[cacheIndex] };
-    cacheIndex += 1;
-
-    if (cacheIndex >= allItems.length) {
-      cacheIndex = 0;
+function* createRoundRobinGenerator<T>(allItems: T[]): Generator<T, T, never> {
+  for (let i = 0; ; i++) {
+    if (i === allItems.length) {
+      i = 0;
     }
 
-    return item;
-  };
+    yield allItems[i];
+  }
 }
 
 const findGameMaxForPlatform = async (platform: Platform) => {
@@ -155,7 +151,7 @@ function parseImage(response: GameResponse) {
 }
 
 export async function gotd(): Promise<Discord.MessageEmbed> {
-  const platform = roundRobin();
+  const platform = roundRobin.next().value;
   const maxGames = await findGameMaxForPlatform(platform);
   const game = await findRandomGame(platform, maxGames);
   const image = parseImage(game);
