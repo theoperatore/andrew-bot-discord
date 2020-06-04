@@ -4,6 +4,8 @@ import { gotd } from './commands/gotd';
 import { createHelp } from './commands/help';
 import { info } from './commands/info';
 
+// add in a firebase admin client
+
 const client = new Discord.Client();
 const parser = new Parser();
 

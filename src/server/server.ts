@@ -39,7 +39,7 @@ export function createServer(options: CommandServerOptions): CommandServer {
   let heartbeatInterval: NodeJS.Timeout | null = null;
   let heartbeatAck = false;
   let lastSequenceId: number | null = null;
-  let sessionId: string = '';
+  // let sessionId: string = '';
 
   /**
    * Open a websocket to the discord gateway
@@ -73,7 +73,7 @@ export function createServer(options: CommandServerOptions): CommandServer {
         } else if (dat.op === 11) {
           heartbeatAck = true;
         } else if (dat.op === 0 && dat.t === 'READY') {
-          sessionId = dat.d.session_id;
+          // sessionId = dat.d.session_id;
           lastSequenceId = dat.s;
           resolve(connection);
         } else if (dat.op === 0 && dat.t === 'MESSAGE_CREATE') {

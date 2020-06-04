@@ -8,9 +8,9 @@ const apiKey = process.env.GB_TOKEN;
 if (!apiKey) throw new Error('GB_TOKEN must be defined in environment');
 
 function* createRoundRobinGenerator<T>(allItems: T[]): Generator<T, T, never> {
-  for (let i = 0; ; i++) {
-    if (i === allItems.length) {
-      i = 0;
+  for (let i = allItems.length - 1; ; i--) {
+    if (i === 0) {
+      i = allItems.length - 1;
     }
 
     yield allItems[i];
