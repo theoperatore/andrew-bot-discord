@@ -197,3 +197,11 @@ It's tough not having a preview option.
 I think I've got it good for now. About to push it to master. Saw a curious thing though, I noticed that andrewbot the raspberry pi was a little sluggish when sshing. Ran a few commands, `htop` and `docker stats` and noticed that each container was allocating ~1Gb of memory. They definitely don't need that much.
 
 I restarted them using the `--memory` command and limited AndrewBot to use `200MiB` and watchtower to use `100Mib`. Going to monitor if this number is adequate during bust moments, like downloading new images for andrewbot or when there is increased stress and load during the "peak" usage hours of the discord channel.
+
+### Wednesday June 3, 2020
+
+It's been a while, but I've been getting requests to add a history feature to AndrewBot. However in doing so, I have found that watchtower doesn't really work too well in the limited environment of the raspberry pi. Instead, I'll do it all manually. When I push to master, github will build and publish a new docker image. Then when I want to deploy to production, I will run an `ansible` playbook to deploy. Bonus, I can use the role `docker-pi` I've made to bootstrap docker on a new raspberry pi. Now it's even easier to template bootstrapping!
+
+Everything is automated, except for logging into Docker Hub. If that isn't required it just works. Otherwise there will be a one-time step to run `docker login` after bootstrapping. :(
+
+Now on to building a firebase integration to save games I've sent to the group!

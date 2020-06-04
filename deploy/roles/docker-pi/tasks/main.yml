@@ -1,0 +1,41 @@
+---
+- name: Check if Docker is already present.
+  command: which docker
+  failed_when: false
+  changed_when: false
+  register: docker_command_result
+
+- name: Install required system packages
+  become: yes
+  apt: name={{ item }} state=latest update_cache=yes
+  loop: ['python3-pip', 'virtualenv', 'python3-setuptools']
+  when: docker_command_result.rc == 1
+
+- name: Download Docker install script.
+  get_url:
+    url: https://get.docker.com/
+    dest: /tmp/get-docker.sh
+    mode: 0775
+  when: docker_command_result.rc == 1
+
+- name: Run Docker install script.
+  command: /tmp/get-docker.sh
+  when: docker_command_result.rc == 1
+
+- name: Add $USER to the docker group
+  become: yes
+  user:
+    name: '$USER'
+    groups: docker
+  when: docker_command_result.rc == 1
+
+- name: Install Docker Module for Python
+  pip:
+    name: docker
+  when: docker_command_result.rc == 1
+
+- name: Copy env
+  copy:
+    src: '{{ role_path }}/files/.env'
+    dest: '{{ envpath }}'
+    mode: 0644
