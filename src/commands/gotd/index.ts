@@ -1,7 +1,7 @@
 import Discord from 'discord.js';
 import fetch from 'isomorphic-unfetch';
 import { platforms, Platform } from './giantBombPlatforms';
-import { getGame, saveGame } from '../../../src/db';
+import { getGame, saveGame } from '../../db';
 
 const roundRobin = createRoundRobinGenerator(platforms);
 const apiKey = process.env.GB_TOKEN;
