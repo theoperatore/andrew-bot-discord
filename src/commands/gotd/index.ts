@@ -1,6 +1,7 @@
 import Discord from 'discord.js';
 import fetch from 'isomorphic-unfetch';
 import { platforms, Platform } from './giantBombPlatforms';
+import { getGame, saveGame } from '../../../src/db';
 
 const roundRobin = createRoundRobinGenerator(platforms);
 const apiKey = process.env.GB_TOKEN;
@@ -36,6 +37,7 @@ const findGameMaxForPlatform = async (platform: Platform) => {
 };
 
 type GameResponse = {
+  id: string;
   image: {
     super_url?: string;
     screen_url?: string;
@@ -82,7 +84,7 @@ const findRandomGame = async (platform: Platform, gameMax: number) => {
   return game;
 };
 
-const formatDate = (date: string) =>
+const formatDate = (date: string | number) =>
   new Intl.DateTimeFormat('en', {
     timeZone: 'UTC',
     month: 'short',
@@ -156,8 +158,9 @@ export async function gotd(): Promise<Discord.MessageEmbed> {
   const game = await findRandomGame(platform, maxGames);
   const image = parseImage(game);
   const date = parseDate(game);
+  const dbGame = await getGame(game.id);
 
-  return new Discord.MessageEmbed()
+  const msg = new Discord.MessageEmbed()
     .setColor('#0099ff')
     .setTitle(game.name)
     .setAuthor('Game of the Day')
@@ -166,4 +169,15 @@ export async function gotd(): Promise<Discord.MessageEmbed> {
     .addField('platform', platform.name, true)
     .setDescription(game.deck)
     .setImage(image);
+
+  if (dbGame) {
+    msg.addField(
+      'Duplicate',
+      `first sent on: ${formatDate(dbGame.first_sent_ts)}`
+    );
+  } else {
+    saveGame(game.id, game.name, platform.id, platform.name);
+  }
+
+  return msg;
 }

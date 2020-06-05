@@ -4,13 +4,17 @@ import { gotd } from './commands/gotd';
 import { createHelp } from './commands/help';
 import { info } from './commands/info';
 
-// add in a firebase admin client
-
+const isProduction = process.env.NODE_ENV === 'production';
 const client = new Discord.Client();
 const parser = new Parser();
 
 parser.setCommand('info', '!info: Show AndrewBot info', info);
 parser.setCommand('gotd', '!gotd: Random Game of the Day', gotd);
+
+if (!isProduction) {
+  parser.setCommand('dev', '!dev: Dev Game of the Day', gotd);
+}
+
 parser.setCommand('help', '!help: Show available commands', createHelp(parser));
 
 client.on('ready', () => {
