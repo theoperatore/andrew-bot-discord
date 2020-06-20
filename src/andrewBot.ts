@@ -3,6 +3,7 @@ import { Parser } from './parser';
 import { gotd } from './commands/gotd';
 import { createHelp } from './commands/help';
 import { info } from './commands/info';
+import { createCron } from './commands/cron-gotd';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const client = new Discord.Client();
@@ -10,6 +11,7 @@ const parser = new Parser();
 
 parser.setCommand('info', '!info: Show AndrewBot info', info);
 parser.setCommand('gotd', '!gotd: Random Game of the Day', gotd);
+parser.setCommand('cron', '!cron: Schedule a gotd', createCron);
 
 if (!isProduction) {
   parser.setCommand('dev', '!dev: Dev Game of the Day', gotd);
@@ -32,8 +34,8 @@ client.on('message', message => {
   }
 
   const command = parser.parse(message.content);
-  if (command) {
-    command(message.content)
+  if (command && message.channel) {
+    command(message.content, message.channel)
       .then(out => {
         message.channel?.send(out);
       })

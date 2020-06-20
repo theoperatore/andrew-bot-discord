@@ -1,7 +1,8 @@
 import Discord from 'discord.js';
 
 export type Command = (
-  rawText: string | null
+  rawText: string | null,
+  channel: Discord.TextChannel | Discord.DMChannel
 ) => Promise<Discord.MessageEmbed | string>;
 
 export class Parser {
