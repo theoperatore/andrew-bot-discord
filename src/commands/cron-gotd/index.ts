@@ -2,7 +2,10 @@ import Discord from 'discord.js';
 import { CronJob } from 'cron';
 import { gotd } from '../gotd';
 
-type CronChannel = Discord.TextChannel | Discord.DMChannel;
+type CronChannel =
+  | Discord.TextChannel
+  | Discord.DMChannel
+  | Discord.NewsChannel;
 
 let jobsStatus: {
   [channelId: string]: CronJob;
