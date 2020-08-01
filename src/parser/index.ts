@@ -2,7 +2,7 @@ import Discord from 'discord.js';
 
 export type Command = (
   rawText: string | null,
-  channel: Discord.TextChannel | Discord.DMChannel
+  channel: Discord.TextChannel | Discord.DMChannel | Discord.NewsChannel
 ) => Promise<Discord.MessageEmbed | string>;
 
 export class Parser {
