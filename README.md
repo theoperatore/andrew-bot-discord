@@ -17,6 +17,8 @@ Use a `.env` file. Currently used environment vars defined this way:
 ```
 - DISCORD_BOT_TOKEN: `string` - the token from discord's bot page
 - GB_TOKEN: `string` - the api token for access to GiantBomb's api
+- GCLOUD_CREDENTIALS: `base64 string of json` - service account creds for firebase
+- FIREBASE_URL: `url` - where the database is.
 ```
 
 ### License
