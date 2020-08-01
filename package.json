@@ -11,12 +11,9 @@
   "scripts": {
     "dev": "GIT_SHA=$(git rev-parse --short HEAD) GIT_BRANCH=$(git rev-parse --abbrev-ref HEAD) ts-run -r dotenv/config src/index.ts",
     "build": "tsc",
-    "docker:build:test": "docker build -t andrewbot-test .",
-    "docker:build:rm": "docker rmi andrewbot-test",
-    "copy-env": "cp .env deploy/roles/docker-pi/files",
-    "deploy": "yarn copy-env && ansible-playbook deploy/deployment.yml -i deploy/hosts",
     "test": "jest --watch",
-    "test:ci": "jest"
+    "test:ci": "jest",
+    "postinstall": "npm run build"
   },
   "husky": {
     "hooks": {
@@ -25,27 +22,27 @@
   },
   "dependencies": {
     "cron": "^1.8.2",
-    "discord.js": "^12.0.2",
+    "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
-    "firebase-admin": "^8.12.1",
+    "firebase-admin": "^9.0.0",
     "isomorphic-unfetch": "^3.0.0",
-    "next": "^9.3.2",
+    "next": "^9.5.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "ws": "^7.2.3"
+    "ws": "^7.3.1"
   },
   "devDependencies": {
-    "@kirbysayshi/ts-run": "^3.0.1",
+    "@kirbysayshi/ts-run": "^5.0.1",
     "@types/cron": "^1.7.2",
-    "@types/jest": "^25.1.4",
-    "@types/node": "^13.9.2",
-    "@types/react": "^16.9.27",
-    "@types/react-dom": "^16.9.5",
-    "@types/ws": "^7.2.3",
-    "husky": "^4.2.3",
-    "jest": "^25.2.4",
-    "prettier": "^1.19.1",
+    "@types/jest": "^26.0.8",
+    "@types/node": "^14.0.27",
+    "@types/react": "^16.9.44",
+    "@types/react-dom": "^16.9.8",
+    "@types/ws": "^7.2.6",
+    "husky": "^4.2.5",
+    "jest": "^26.2.2",
+    "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.7"
   }
 }
