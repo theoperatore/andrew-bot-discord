@@ -3,7 +3,8 @@ import { Parser } from './parser';
 import { gotd } from './commands/gotd';
 import { createHelp } from './commands/help';
 import { info } from './commands/info';
-import { createCron } from './commands/cron-gotd';
+import { createCron, setUpExistingCron } from './commands/cron-gotd';
+import { getCronChannel } from './db';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const client = new Discord.Client();
@@ -21,6 +22,7 @@ parser.setCommand('help', '!help: Show available commands', createHelp(parser));
 
 client.on('ready', () => {
   console.log('[discord]> discord client ready');
+  setUpCron();
 });
 
 client.on('message', message => {
@@ -55,6 +57,15 @@ client.on('shardError', (error, id) => {
   console.log(`[discord]> shard error: ${error.message} -- id: ${id}`);
   console.error(error);
 });
+
+async function setUpCron() {
+  const channelId = await getCronChannel();
+
+  if (channelId) {
+    console.log('[discord]> setting up cron for channel:', channelId);
+    setUpExistingCron(client, channelId.id);
+  }
+}
 
 export function startServer(token: string) {
   return client.login(token);

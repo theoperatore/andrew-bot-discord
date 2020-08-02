@@ -70,3 +70,16 @@ export function getLastPlatform() {
 export function saveLastPlatform(id: string) {
   return firestore.collection('last-platform').doc('last-platform').set({ id });
 }
+
+export function saveChannelId(id: string) {
+  return firestore.collection('cron-channel').doc('cron-channel').set({ id });
+}
+
+export function getCronChannel() {
+  return firestore
+    .collection('cron-channel')
+    .doc('cron-channel')
+    .get()
+    .then(data => data.data())
+    .then(d => (d ? (d as { id: string }) : undefined));
+}
