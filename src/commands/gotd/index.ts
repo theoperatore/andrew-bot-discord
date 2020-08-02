@@ -1,21 +1,29 @@
 import Discord from 'discord.js';
 import fetch from 'isomorphic-unfetch';
 import { platforms, Platform } from './giantBombPlatforms';
-import { getGame, saveGame } from '../../db';
+import { getGame, saveGame, getLastPlatform, saveLastPlatform } from '../../db';
 
-const roundRobin = createRoundRobinGenerator(platforms);
+const roundRobin = (async () => (await createRoundRobin())(platforms))();
 const apiKey = process.env.GB_TOKEN;
 
 if (!apiKey) throw new Error('GB_TOKEN must be defined in environment');
 
-function* createRoundRobinGenerator<T>(allItems: T[]): Generator<T, T, never> {
-  for (let i = allItems.length - 1; ; i--) {
-    if (i === 0) {
-      i = allItems.length - 1;
-    }
+async function createRoundRobin() {
+  const lastPlat = await getLastPlatform();
+  return function* createRoundRobinGenerator<T extends { id: number }>(
+    allItems: T[]
+  ): Generator<T, T, never> {
+    const last = lastPlat ? Number(lastPlat.id) - 1 : -1;
+    const existing = allItems.findIndex(item => item.id === last);
+    const start = existing === -1 ? allItems.length - 1 : existing;
+    for (let i = start; ; i--) {
+      if (i <= 0) {
+        i = allItems.length - 1;
+      }
 
-    yield allItems[i];
-  }
+      yield allItems[i];
+    }
+  };
 }
 
 const findGameMaxForPlatform = async (platform: Platform) => {
@@ -142,18 +150,20 @@ function parseDate(response: GameResponse) {
 
 function parseImage(response: GameResponse) {
   const { image } = response;
-  return `${image.super_url ||
+  return `${
+    image.super_url ||
     image.screen_url ||
     image.medium_url ||
     image.small_url ||
     image.thumb_url ||
     image.icon_url ||
     image.tiny_url ||
-    ''}`;
+    ''
+  }`;
 }
 
 export async function gotd(): Promise<Discord.MessageEmbed> {
-  const platform = roundRobin.next().value;
+  const platform = (await roundRobin).next().value;
   const maxGames = await findGameMaxForPlatform(platform);
   const game = await findRandomGame(platform, maxGames);
   const image = parseImage(game);
@@ -178,6 +188,8 @@ export async function gotd(): Promise<Discord.MessageEmbed> {
   } else {
     saveGame(game.id, game.name, platform.id, platform.name);
   }
+
+  saveLastPlatform(`${platform.id}`);
 
   return msg;
 }

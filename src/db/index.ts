@@ -26,6 +26,10 @@ export type DbGame = {
   first_sent_ts: number;
 };
 
+export type LastPlatform = {
+  id: string;
+};
+
 export function getGame(id: string) {
   return firestore
     .collection('gotd-games')
@@ -41,14 +45,28 @@ export function saveGame(
   platform_id: number,
   platform_name: string
 ) {
+  return firestore.collection('gotd-games').doc(`${id}`).create({
+    id,
+    name,
+    platform_id,
+    platform_name,
+    first_sent_ts: Date.now(),
+  });
+}
+
+export function getLastPlatform() {
   return firestore
-    .collection('gotd-games')
-    .doc(`${id}`)
-    .create({
-      id,
-      name,
-      platform_id,
-      platform_name,
-      first_sent_ts: Date.now(),
-    });
+    .collection('last-platform')
+    .doc('last-platform')
+    .get()
+    .then(data => data.data())
+    .then(d => (d ? (d as LastPlatform) : undefined));
+}
+
+/**
+ *
+ * @param id The string Id of the last platform
+ */
+export function saveLastPlatform(id: string) {
+  return firestore.collection('last-platform').doc('last-platform').set({ id });
 }
