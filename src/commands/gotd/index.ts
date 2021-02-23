@@ -129,7 +129,7 @@ export async function gotd(): Promise<Discord.MessageEmbed> {
     .setAuthor('Game of the Day')
     .setURL(game.site_detail_url)
     .addField('released', date, true)
-    .addField('platforms', game.platforms.map(p => p.name).join(', '), true)
+    .addField('platforms', game.platforms?.map(p => p.name).join(', '), true)
     .setDescription(game.deck)
     .setImage(image);
 
