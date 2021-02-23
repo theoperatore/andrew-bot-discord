@@ -54,23 +54,6 @@ export function saveGame(
   });
 }
 
-export function getLastPlatform() {
-  return firestore
-    .collection('last-platform')
-    .doc('last-platform')
-    .get()
-    .then(data => data.data())
-    .then(d => (d ? (d as LastPlatform) : undefined));
-}
-
-/**
- *
- * @param id The string Id of the last platform
- */
-export function saveLastPlatform(id: string) {
-  return firestore.collection('last-platform').doc('last-platform').set({ id });
-}
-
 export function saveChannelId(id: string) {
   return firestore.collection('cron-channel').doc('cron-channel').set({ id });
 }

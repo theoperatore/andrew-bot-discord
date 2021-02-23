@@ -1,95 +1,36 @@
 import Discord from 'discord.js';
 import fetch from 'isomorphic-unfetch';
-import { platforms, Platform } from './giantBombPlatforms';
-import { getGame, saveGame, getLastPlatform, saveLastPlatform } from '../../db';
+import { getGame, saveGame } from '../../db';
 
-const roundRobin = (async () => (await createRoundRobin())(platforms))();
-const apiKey = process.env.GB_TOKEN;
-
-if (!apiKey) throw new Error('GB_TOKEN must be defined in environment');
-
-async function createRoundRobin() {
-  const lastPlat = await getLastPlatform();
-  return function* createRoundRobinGenerator<T extends { id: number }>(
-    allItems: T[]
-  ): Generator<T, T, never> {
-    const last = lastPlat ? Number(lastPlat.id) - 1 : -1;
-    const existing = allItems.findIndex(item => item.id === last);
-    const start = existing === -1 ? allItems.length - 1 : existing;
-    for (let i = start; ; i--) {
-      if (i <= 0) {
-        i = allItems.length - 1;
-      }
-
-      yield allItems[i];
-    }
-  };
-}
-
-const findGameMaxForPlatform = async (platform: Platform) => {
-  const response = await fetch(
-    `https://www.giantbomb.com/api/games?api_key=${apiKey}&format=json&platforms=${platform.id}&limit=1&field_list=id`,
-    {
-      headers: {
-        'user-agent': 'gotd-1.0.0',
-        'Content-Type': 'application/json',
-      },
-    }
-  ).then(r => r.json() as Promise<{ number_of_total_results: number }>);
-
-  if (!response) {
-    throw new Error('No response from GiantBomb for max games');
-  }
-
-  return response.number_of_total_results;
+type GameImage = {
+  super_url?: string;
+  screen_url?: string;
+  medium_url?: string;
+  small_url?: string;
+  thumb_url?: string;
+  icon_url?: string;
+  tiny_url?: string;
 };
 
-type GameResponse = {
-  id: string;
-  image: {
-    super_url?: string;
-    screen_url?: string;
-    medium_url?: string;
-    small_url?: string;
-    thumb_url?: string;
-    icon_url?: string;
-    tiny_url?: string;
-  };
+type Game = {
+  id: number;
+  image: GameImage;
   name: string;
-  deck: string;
-  description: string;
+  deck: string | null;
+  description: string | null;
   original_release_date?: string;
   site_detail_url: string;
-  expected_release_day?: string;
-  expected_release_month?: string;
-  expected_release_year?: string;
-  expected_release_quarter?: string;
-};
-
-const findRandomGame = async (platform: Platform, gameMax: number) => {
-  const offset = Math.round(Math.random() * gameMax);
-  const response = await fetch(
-    `https://www.giantbomb.com/api/games?api_key=${apiKey}&format=json&platforms=${platform.id}&limit=1&offset=${offset}`,
-    {
-      headers: {
-        'user-agent': 'gotd-2.0.0',
-        'Content-Type': 'application/json',
-      },
-    }
-  ).then(r => r.json() as Promise<{ results: GameResponse[] }>);
-
-  if (!response) {
-    throw new Error('Failed to get random game from GiantBomb');
-  }
-
-  const game = response.results[0];
-  if (!game) {
-    throw new Error(
-      `Undefined results from GB response for offset: ${offset}, with game max: ${gameMax}`
-    );
-  }
-
-  return game;
+  expected_release_day?: string | null;
+  expected_release_month?: string | null;
+  expected_release_year?: string | null;
+  expected_release_quarter?: string | null;
+  platforms: {
+    api_detail_url: string;
+    id: number;
+    name: string;
+    site_detail_url: string;
+    abbreviation: string;
+  }[];
 };
 
 const formatDate = (date: string | number) =>
@@ -116,7 +57,7 @@ const months = [
   'Dec',
 ];
 
-function parseDate(response: GameResponse) {
+function parseDate(response: Game) {
   const {
     original_release_date,
     expected_release_day,
@@ -148,7 +89,7 @@ function parseDate(response: GameResponse) {
   return date;
 }
 
-function parseImage(response: GameResponse) {
+function parseImage(response: Game) {
   const { image } = response;
   return `${
     image.super_url ||
@@ -162,13 +103,25 @@ function parseImage(response: GameResponse) {
   }`;
 }
 
+type AlorgResponse = {
+  status: 'OK' | 'ERROR';
+  result: Game | string; // error message
+};
+
+async function findRandomGame() {
+  const response = await fetch('https://datas.alorg.net/api/v1/games/random');
+  const parsed = (await response.json()) as AlorgResponse;
+  if (parsed.status === 'ERROR')
+    throw new Error(`AlorgClient: ${parsed.result}`);
+  return parsed.result as Game;
+}
+
 export async function gotd(): Promise<Discord.MessageEmbed> {
-  const platform = (await roundRobin).next().value;
-  const maxGames = await findGameMaxForPlatform(platform);
-  const game = await findRandomGame(platform, maxGames);
+  const game = await findRandomGame();
+  const gameId = `${game.id}`;
   const image = parseImage(game);
   const date = parseDate(game);
-  const dbGame = await getGame(game.id);
+  const dbGame = await getGame(gameId);
 
   const msg = new Discord.MessageEmbed()
     .setColor('#0099ff')
@@ -176,7 +129,7 @@ export async function gotd(): Promise<Discord.MessageEmbed> {
     .setAuthor('Game of the Day')
     .setURL(game.site_detail_url)
     .addField('released', date, true)
-    .addField('platform', platform.name, true)
+    .addField('platforms', game.platforms.map(p => p.name).join(', '), true)
     .setDescription(game.deck)
     .setImage(image);
 
@@ -186,10 +139,8 @@ export async function gotd(): Promise<Discord.MessageEmbed> {
       `first sent on: ${formatDate(dbGame.first_sent_ts)}`
     );
   } else {
-    saveGame(game.id, game.name, platform.id, platform.name);
+    saveGame(gameId, game.name, -1, 'datas');
   }
-
-  saveLastPlatform(`${platform.id}`);
 
   return msg;
 }
