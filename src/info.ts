@@ -1,7 +1,7 @@
 import os from 'os';
 import Discord from 'discord.js';
 
-const version = '1.0.6';
+const version = '1.1.0';
 const GIT_SHA = process.env.GIT_SHA;
 const start = Date.now();
 
