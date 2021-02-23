@@ -23,7 +23,7 @@ const server = createServer((req, res) => {
 });
 
 export function startServer(port: string | number) {
-  return new Promise(resolve => {
+  return new Promise<void>(resolve => {
     console.log(`[api]> starting server ${GIT_SHA} ${GIT_BRANCH}`);
     server.listen(port, () => {
       console.log(
