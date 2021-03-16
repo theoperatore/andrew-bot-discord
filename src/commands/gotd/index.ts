@@ -110,14 +110,28 @@ type AlorgResponse = {
 
 async function findRandomGame() {
   const response = await fetch('https://datas.alorg.net/api/v1/games/random');
+  if (!response.ok)
+    throw new Error(`AlorgClient ${response.status} from datas.alorg.net`);
   const parsed = (await response.json()) as AlorgResponse;
   if (parsed.status === 'ERROR')
-    throw new Error(`AlorgClient: ${parsed.result}`);
+    throw new Error(`AlorgClient ${parsed.result}`);
   return parsed.result as Game;
 }
 
+async function findGameWithRetries(numRetries: number = 3): Promise<Game> {
+  if (numRetries <= 0)
+    throw new Error(`AlorgClient: failed to get valid response`);
+
+  try {
+    return await findRandomGame();
+  } catch (error) {
+    console.error(`fetch-retry (${numRetries}): ${error.message}`);
+    return findGameWithRetries(numRetries - 1);
+  }
+}
+
 export async function gotd(): Promise<Discord.MessageEmbed> {
-  const game = await findRandomGame();
+  const game = await findGameWithRetries();
   const gameId = `${game.id}`;
   const image = parseImage(game);
   const date = parseDate(game);
