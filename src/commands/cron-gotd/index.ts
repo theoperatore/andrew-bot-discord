@@ -67,9 +67,9 @@ export async function setUpExistingCron(
     }
   }
 
-  // run at 7am (but this is UTC)
+  // run at 11am (but this is UTC)
   const job = new CronJob(
-    '0 0 7 * * *',
+    '0 0 11 * * *',
     () => {
       process.nextTick(trySend);
     },
